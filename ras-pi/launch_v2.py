@@ -148,7 +148,7 @@ def testing():
 
     rgb_led.color = Color('yellow')
     rgb_led.on()
-    sleep(500)
+    sleep(0.5)
     
 
 # Runs the code in normal mode if testing flag is present, otherwise sets led to red if any errors
