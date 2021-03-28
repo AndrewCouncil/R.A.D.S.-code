@@ -143,12 +143,12 @@ def main_work():
     sleep(PROGRAM_HZ/1000)
 
 def testing():
-    os.system('cls' if os.name == 'nt' else 'clear')
-    print(not pir_sensor.is_pressed)
+    # os.system('cls' if os.name == 'nt' else 'clear')
+    print(pir_sensor.is_pressed)
 
     rgb_led.color = Color('yellow')
     rgb_led.on()
-    sleep(PROGRAM_HZ/1000)
+    sleep(500)
     
 
 # Runs the code in normal mode if testing flag is present, otherwise sets led to red if any errors
