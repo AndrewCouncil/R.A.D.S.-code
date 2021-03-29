@@ -1,5 +1,5 @@
 from requests.api import request
-from gpiozero import RGBLED, Button, DistanceSensor, LED
+from gpiozero import RGBLED, MotionSensor, LED
 from colorzero import Color
 from time import sleep
 import requests, os, sys
@@ -25,7 +25,7 @@ FALSE_ROOM_URL = "/roomdata?r={}&f=0".format(ROOM_NUM)
 TRUE_ROOM_URL  = "/roomdata?r={}&f=1".format(ROOM_NUM)
 
 # Sensor and output setup
-pir_sensor = Button(PIR_PIN, True)
+pir_sensor = MotionSensor(PIR_PIN)
 rgb_led = RGBLED(RED_PIN, BLUE_PIN, GREEN_PIN)
 rgb_led.off()
 
@@ -97,7 +97,7 @@ def main_work():
     # -----------------PERSON DETECTION-----------------
     # If pir or distance sensor tripped, person_detected is True
     person_detected = False
-    if not pir_sensor.is_pressed:
+    if not pir_sensor.motion_detected:
         person_detected = True
         pir_not_detected_time = 0
     else:
@@ -144,7 +144,7 @@ def main_work():
 
 def testing():
     # os.system('cls' if os.name == 'nt' else 'clear')
-    print(pir_sensor.is_pressed)
+    print(pir_sensor.motion_detected)
 
     rgb_led.color = Color('yellow')
     rgb_led.on()
