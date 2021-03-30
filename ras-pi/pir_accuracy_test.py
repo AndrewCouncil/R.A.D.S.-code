@@ -29,7 +29,7 @@ t0 = time.time()
 total_seconds = 2*60*60
 last_person_present = False
 detection_count = 0
-detected_duration = 0
+detected_duration = 0.0
 while (time.time() - t0) < total_seconds:
     # Add element to end of fixed length list
     headval = queue.popleft()
@@ -41,8 +41,8 @@ while (time.time() - t0) < total_seconds:
     something_detected = (detection_count > DETECTION_COUNT_THRESHOLD)
     person_present = False
     if something_detected:
-        detected_duration += PROGRAM_HZ
-        if detected_duration > SENSE_DELAY_SECS*1000:
+        detected_duration += (PROGRAM_HZ/1000)
+        if detected_duration > SENSE_DELAY_SECS:
             person_present = True
     else:
         detected_duration = 0
@@ -51,6 +51,7 @@ while (time.time() - t0) < total_seconds:
     #     print(detection_count)
     if last_person_present != person_present:
         print(detection_count)
+        print(detected_duration)
         now = datetime.now()
         message = "Person present now {}  ".format(person_present) + now.strftime("%H:%M:%S")
         print(message)
