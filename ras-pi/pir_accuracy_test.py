@@ -35,8 +35,10 @@ while (time.time() - t0) < total_seconds:
     tailval = pir.motion_detected
     detection_count += (int) (tailval)
     queue.append(tailval)
-
+    
     person_present = (detection_count > DETECTION_COUNT_THRESHOLD)
+    if person_present:
+        print(detection_count)
     if last_person_present != person_present:
         print(detection_count)
         now = datetime.now()
