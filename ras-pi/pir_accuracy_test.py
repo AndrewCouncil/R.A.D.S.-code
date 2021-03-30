@@ -9,9 +9,10 @@ start_now = datetime.now()
 file_name = "logs/accuracy_log_" + start_now.strftime("%m.%d.%y_%H:%M:%S") + ".txt"
 
 PROGRAM_HZ = 100 #update speed of program in ms
-DETECTION_COUNT_THRESHOLD = 40
 SENSE_DELAY_SECS = 120
 RECORD_DURATION_SECS = 60
+LIST_SIZE = RECORD_DURATION_SECS/(PROGRAM_HZ/1000)
+DETECTION_COUNT_THRESHOLD = (int)(LIST_SIZE/30)
 
 class Node:
     def __init__(self, data=None):
@@ -19,7 +20,7 @@ class Node:
         self.next = None
 
 # Generate queue
-queue = deque([False] * (RECORD_DURATION_SECS/(PROGRAM_HZ/1000))) 
+queue = deque([False] * (LIST_SIZE)) 
 
 
 
