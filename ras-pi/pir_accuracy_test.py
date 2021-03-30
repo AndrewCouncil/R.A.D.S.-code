@@ -38,14 +38,14 @@ while (time.time() - t0) < total_seconds:
     detection_count += (int) (tailval)
     queue.append(tailval)
     
-    something_detected = (detection_count > DETECTION_COUNT_THRESHOLD)
-    person_present = False
-    if something_detected:
-        detected_duration += (float)((float)(PROGRAM_HZ)/1000.0)
-        if detected_duration > SENSE_DELAY_SECS:
-            person_present = True
-    else:
-        detected_duration = 0
+    person_present = (detection_count > DETECTION_COUNT_THRESHOLD)
+    # person_present = False
+    # if something_detected:
+    #     detected_duration += (float)((float)(PROGRAM_HZ)/1000.0)
+    #     if detected_duration > SENSE_DELAY_SECS:
+    #         person_present = True
+    # else:
+    #     detected_duration = 0
 
     # if person_present:
     #     print(detection_count)
