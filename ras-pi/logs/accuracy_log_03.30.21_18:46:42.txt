@@ -1,2 +1,0 @@
-Person present now True  18:46:48
-Person present now False  18:46:50
