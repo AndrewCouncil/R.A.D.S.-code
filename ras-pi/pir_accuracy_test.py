@@ -12,7 +12,7 @@ PROGRAM_HZ = 100 #update speed of program in ms
 SENSE_DELAY_SECS = 120
 RECORD_DURATION_SECS = 120
 LIST_SIZE =  (int) ((float)(RECORD_DURATION_SECS)/ (float)((float)(PROGRAM_HZ)/1000.0))
-DETECTION_COUNT_THRESHOLD = (int)(LIST_SIZE/15)
+DETECTION_COUNT_THRESHOLD = (int)(LIST_SIZE/5)
 
 class Node:
     def __init__(self, data=None):
@@ -22,7 +22,7 @@ class Node:
 # Generate queue
 queue = deque([False] * (LIST_SIZE)) 
 
-print("LIST SIZE IS: ", LIST_SIZE)
+print("LIST SIZE IS: {}".format(LIST_SIZE))
 
 t0 = time.time()
 total_seconds = 2*60*60
