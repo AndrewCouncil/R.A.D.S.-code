@@ -12,7 +12,7 @@ PROGRAM_HZ = 100 #update speed of program in ms
 SENSE_DELAY_SECS = 120
 RECORD_DURATION_SECS = 240
 LIST_SIZE =  (int) ((float)(RECORD_DURATION_SECS)/ (float)((float)(PROGRAM_HZ)/1000.0))
-DETECTION_COUNT_THRESHOLD = (int)(LIST_SIZE*0.8)
+DETECTION_COUNT_THRESHOLD = (int)(LIST_SIZE*0.6)
 
 class Node:
     def __init__(self, data=None):
@@ -29,6 +29,7 @@ t0 = time.time()
 total_seconds = 2*60*60
 last_person_present = False
 detection_count = 0
+detected_duration = 0
 while (time.time() - t0) < total_seconds:
     # Add element to end of fixed length list
     headval = queue.popleft()
@@ -37,9 +38,17 @@ while (time.time() - t0) < total_seconds:
     detection_count += (int) (tailval)
     queue.append(tailval)
     
-    person_present = (detection_count > DETECTION_COUNT_THRESHOLD)
-    if person_present:
-        print(detection_count)
+    something_detected = (detection_count > DETECTION_COUNT_THRESHOLD)
+    person_present = False
+    if something_detected:
+        detected_duration += PROGRAM_HZ
+        if detected_duration > SENSE_DELAY_SECS*1000:
+            person_present = True
+    else:
+        detected_duration = 0
+
+    # if person_present:
+    #     print(detection_count)
     if last_person_present != person_present:
         print(detection_count)
         now = datetime.now()
