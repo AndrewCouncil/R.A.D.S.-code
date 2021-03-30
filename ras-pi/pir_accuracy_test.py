@@ -11,7 +11,7 @@ file_name = "logs/accuracy_log_" + start_now.strftime("%m.%d.%y_%H:%M:%S") + ".t
 PROGRAM_HZ = 100 #update speed of program in ms
 SENSE_DELAY_SECS = 120
 RECORD_DURATION_SECS = 60
-LIST_SIZE =  (int) ((float)(RECORD_DURATION_SECS)/ (float)(PROGRAM_HZ/1000))
+LIST_SIZE =  (int) ((float)(RECORD_DURATION_SECS)/ (float)((float)(PROGRAM_HZ)/1000.0))
 DETECTION_COUNT_THRESHOLD = (int)(LIST_SIZE/30)
 
 class Node:
