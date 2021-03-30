@@ -12,7 +12,7 @@ PROGRAM_HZ = 100 #update speed of program in ms
 SENSE_DELAY_SECS = 120
 RECORD_DURATION_SECS = 240
 LIST_SIZE =  (int) ((float)(RECORD_DURATION_SECS)/ (float)((float)(PROGRAM_HZ)/1000.0))
-DETECTION_COUNT_THRESHOLD = (int)(LIST_SIZE*0.6)
+DETECTION_COUNT_THRESHOLD = (int)(LIST_SIZE*0.2)
 
 class Node:
     def __init__(self, data=None):
@@ -59,6 +59,6 @@ while (time.time() - t0) < total_seconds:
         f.write(message + "\n")
         f.close()
 
-    print("time testing")
+    # print("time testing")
     last_person_present = person_present
     time.sleep((float)((float)(PROGRAM_HZ)/1000.0))  
