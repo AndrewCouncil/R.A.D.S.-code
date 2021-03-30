@@ -59,6 +59,6 @@ while (time.time() - t0) < total_seconds:
         f.write(message + "\n")
         f.close()
 
-    
+    print("time testing")
     last_person_present = person_present
-    time.sleep(PROGRAM_HZ/1000)  
+    time.sleep((float)((float)(PROGRAM_HZ)/1000.0))  
