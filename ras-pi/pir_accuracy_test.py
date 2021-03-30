@@ -22,7 +22,7 @@ class Node:
 # Generate queue
 queue = deque([False] * (LIST_SIZE)) 
 
-
+print("LIST SIZE IS: ", LIST_SIZE)
 
 t0 = time.time()
 total_seconds = 2*60*60
