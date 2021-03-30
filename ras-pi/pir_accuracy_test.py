@@ -41,7 +41,7 @@ while (time.time() - t0) < total_seconds:
     something_detected = (detection_count > DETECTION_COUNT_THRESHOLD)
     person_present = False
     if something_detected:
-        detected_duration += (PROGRAM_HZ/1000)
+        detected_duration += (float)((float)(PROGRAM_HZ)/1000.0)
         if detected_duration > SENSE_DELAY_SECS:
             person_present = True
     else:
