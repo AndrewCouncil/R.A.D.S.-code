@@ -7,11 +7,11 @@ from gpio_obj import RADSInputOutput
 def test_rgb(rads):
 	rads.rgb_led.on()
 	while True:
-		rads.rgb_led.color = Color("purple")
+		rads.rgb_led.color = Color("red")
 		sleep(1)
-		rads.rgb_led.color = Color("orange")
+		rads.rgb_led.color = Color("green")
 		sleep(1)
-		rads.rgb_led.color = Color("pink")
+		rads.rgb_led.color = Color("blue")
 		sleep(1)
 
 if __name__ == "__main__":

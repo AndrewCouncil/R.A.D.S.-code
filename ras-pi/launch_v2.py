@@ -1,17 +1,8 @@
 from colorzero import Color
 from time import sleep
 from gpio_obj import RADSInputOutput
-from network_tools import network_wait, send_http
-import requests, sys
-
-
-
-#URLs for data
-ROOT_URL = 'http://54.147.192.125'
-if "-local" in sys.argv:
-    ROOT_URL = 'http://localhost:5000'
-FALSE_ROOM_URL = "/roomdata?r={}&f=0".format(ROOM_NUM)
-TRUE_ROOM_URL  = "/roomdata?r={}&f=1".format(ROOM_NUM)
+from network_tools import send_http
+import sys
 
 
 # VARIABLE BOUNDING
@@ -58,13 +49,12 @@ def main_work(rads):
     # Send a HTTP request in this case
     if person_present != person_was_present:
         print("person change detected!")
-        request_url = ROOT_URL
         if person_present:
             print("person on now")
-            request_url += TRUE_ROOM_URL
+            request_url = rads.TRUE_ROOM_URL
         else:
             print("person off now")
-            request_url += FALSE_ROOM_URL
+            request_url = rads.FALSE_ROOM_URL
         
         send_http(request_url)
 
@@ -72,8 +62,8 @@ def main_work(rads):
 
 
     # Set LED to green and sleep for PROGRAM_HZ time
-    rgb_led.on()
-    rgb_led.color = Color('green')
+    rads.rgb_led.on()
+    rads.rgb_led.color = Color('green')
     sleep(rads.PROGRAM_HZ/1000)
 
 def testing(rads):
@@ -90,7 +80,7 @@ def run(rads):
     if sys.argv[1] == "-testing":
         while True: testing(rads)
     
-    send_http(ROOT_URL + FALSE_ROOM_URL)
+    send_http(rads.FALSE_ROOM_URL)
     if sys.argv[1] == "-v":
         print("starting")
         while True: main_work(rads)
