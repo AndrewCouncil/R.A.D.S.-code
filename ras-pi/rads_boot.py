@@ -3,16 +3,16 @@ from colorzero import Color
 from time import sleep
 from rgb_test import test_rgb
 from gpio_obj import RADSInputOutput
-import os
+import os, git
 
 
 rads = RADSInputOutput()
 rads.rgb_led.color = Color("green")
 sleep(5)
 
-
+g = git.cmd.Git("/home/pi/RADS-code")
 try:
-    os.system("git pull /home/pi/RADS-code")
+    g.pull()
 except:
     rads.rgb_led.color = Color("red")
     sleep(5)
