@@ -5,7 +5,6 @@ from rgb_test import test_rgb
 from gpio_obj import RADSInputOutput
 import os, git
 
-# TEST COMMENT TO TEST PULL OF GITHUB
 
 rads = RADSInputOutput()
 rads.rgb_led.color = Color("green")

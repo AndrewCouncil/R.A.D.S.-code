@@ -3,16 +3,15 @@ from colorzero import Color
 from time import sleep
 from gpio_obj import RADSInputOutput
 
-# TEST COMMENT TO TEST PULL OF GITHUB
 
 def test_rgb(rads):
 	rads.rgb_led.on()
 	while True:
-		rads.rgb_led.color = Color("red")
+		rads.rgb_led.color = Color("purple")
 		sleep(1)
-		rads.rgb_led.color = Color("green")
+		rads.rgb_led.color = Color("orange")
 		sleep(1)
-		rads.rgb_led.color = Color("blue")
+		rads.rgb_led.color = Color("pink")
 		sleep(1)
 
 if __name__ == "__main__":
