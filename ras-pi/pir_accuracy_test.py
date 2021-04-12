@@ -14,11 +14,6 @@ RECORD_DURATION_SECS = 240
 LIST_SIZE =  (int) ((float)(RECORD_DURATION_SECS)/ (float)((float)(PROGRAM_HZ)/1000.0))
 DETECTION_COUNT_THRESHOLD = (int)(LIST_SIZE*0.1)
 
-class Node:
-    def __init__(self, data=None):
-        self.data = data
-        self.next = None
-
 # Generate queue
 queue = deque([False] * (LIST_SIZE)) 
 

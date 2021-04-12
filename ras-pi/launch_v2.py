@@ -1,10 +1,9 @@
-from requests.api import request
-from gpiozero import RGBLED, MotionSensor, LED
+from gpiozero import RGBLED, MotionSensor
 from colorzero import Color
 from time import sleep
-import requests, os, sys
+import requests, os, sys, socket
 
-ROOM_NUM = 1
+ROOM_NUM = (int) (socket.gethostname()[-1:])
 
 SENSE_DELAY_SECS = 120 #Seconds to delay after sensing before going inactive
 DISTANCE_RESET_SECS = 1 * 3600 #Seconds of no pir activity that will reset distance sensor
@@ -14,8 +13,8 @@ PROGRAM_HZ = 30 #update speed of program
 # PINS
 PIR_PIN = 18
 RED_PIN = 16
-BLUE_PIN = 20
-GREEN_PIN = 21
+BLUE_PIN = 21
+GREEN_PIN = 20
 
 #URLs for data
 ROOT_URL = 'http://54.147.192.125'
@@ -28,34 +27,6 @@ TRUE_ROOM_URL  = "/roomdata?r={}&f=1".format(ROOM_NUM)
 pir_sensor = MotionSensor(PIR_PIN)
 rgb_led = RGBLED(RED_PIN, BLUE_PIN, GREEN_PIN)
 rgb_led.off()
-
-# Waits for network connection and valid http requests from the ROOT_URL
-def network_wait():
-    print("network error!")
-    while True:
-        # Check if pinging google works
-        ping_result = requests.get("http://google.com")
-        # If it worked, test http request
-        if ping_result.status_code < 300:
-            # Try the request, and if it works and has a good status code, exit the function
-            try:
-                r = requests.get(ROOT_URL)
-                if r.status_code < 300:
-                    print("\nnetwork online!")
-                    return
-                else:
-                    # If status code is bad print and continue
-                    print("bad status code...")
-            except:
-                # If request errors print and continue
-                print("request not received...")
-        # If it didn't, print and check again
-        else:
-            print("ping to google not working, likely no internet connection...")
-        
-        # Set LED to yellow and wait to match PROGRAM_HZ
-        rgb_led.color = Color('yellow')
-        sleep(PROGRAM_HZ/1000)
 
 # Sent a http request to the given url, checking for any network errors
 def send_http(url):
