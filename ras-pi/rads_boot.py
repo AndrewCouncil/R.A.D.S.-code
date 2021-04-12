@@ -13,11 +13,11 @@ rgb_led.color = Color("green")
 sleep(5)
 
 
-try:
-    os.system("git pull /home/pi/RADS-code")
-except:
-    rgb_led.color = Color("red")
-    raise RuntimeError("Pulling of updated program failed!")
+# try:
+#     os.system("git pull /home/pi/RADS-code")
+# except:
+#     rgb_led.color = Color("red")
+#     raise RuntimeError("Pulling of updated program failed!")
 
 
 print("Starting rgb")
