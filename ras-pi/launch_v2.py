@@ -1,20 +1,10 @@
-from gpiozero import RGBLED, MotionSensor
 from colorzero import Color
 from time import sleep
-import requests, os, sys, socket
+from gpio_obj import RADSInputOutput
+from network_tools import network_wait, send_http
+import requests, sys
 
-ROOM_NUM = (int) (socket.gethostname()[-1:])
 
-SENSE_DELAY_SECS = 120 #Seconds to delay after sensing before going inactive
-DISTANCE_RESET_SECS = 1 * 3600 #Seconds of no pir activity that will reset distance sensor
-DEFAULT_MAXIMUM_METERS = 1 #Distance in meters
-PROGRAM_HZ = 30 #update speed of program
-
-# PINS
-PIR_PIN = 18
-RED_PIN = 16
-BLUE_PIN = 21
-GREEN_PIN = 20
 
 #URLs for data
 ROOT_URL = 'http://54.147.192.125'
@@ -23,42 +13,15 @@ if "-local" in sys.argv:
 FALSE_ROOM_URL = "/roomdata?r={}&f=0".format(ROOM_NUM)
 TRUE_ROOM_URL  = "/roomdata?r={}&f=1".format(ROOM_NUM)
 
-# Sensor and output setup
-pir_sensor = MotionSensor(PIR_PIN)
-rgb_led = RGBLED(RED_PIN, BLUE_PIN, GREEN_PIN)
-rgb_led.off()
-
-# Sent a http request to the given url, checking for any network errors
-def send_http(url):
-    # Check pinging google, if any issues go to network_wait
-    ping_result = requests.get("http://google.com")
-    if ping_result.status_code >= 300: network_wait()
-    # perform http request using requests, if any errors go to network wait and try again once it exits
-    print("sending url: " + url)
-    try:
-        r = requests.get(url)
-        if r.status_code >= 300: 
-            network_wait()
-            r = requests.get(url)
-    except:
-        network_wait()
-        r = requests.get(url)
-    print("url sent!\n")
-    
 
 # VARIABLE BOUNDING
 time_total = 0
 person_detected = False
 person_present = False
 person_was_present = False
-jam_pressed = False
-jam_was_pressed = False
-jam_on = False
-jam_was_on = False
 pir_not_detected_time = 0
-max_meters = DEFAULT_MAXIMUM_METERS
 
-def main_work():
+def main_work(rads):
     # set vars global
     global time_total
     global person_detected
@@ -68,16 +31,16 @@ def main_work():
     # -----------------PERSON DETECTION-----------------
     # If pir or distance sensor tripped, person_detected is True
     person_detected = False
-    if not pir_sensor.motion_detected:
+    if not rads.pir_sensor.motion_detected:
         person_detected = True
         pir_not_detected_time = 0
     else:
         # If pir off for more than DISTANCE_RESET_SECS, reset the maximum distance for the distance sensor
-        if pir_not_detected_time > DISTANCE_RESET_SECS*1000:
+        if pir_not_detected_time > rads.DISTANCE_RESET_SECS*1000:
             # max_meters = distance_sensor.distance()
             pir_not_detected_time = 0
         else:
-            pir_not_detected_time += PROGRAM_HZ
+            pir_not_detected_time += rads.PROGRAM_HZ
 
 
     # If a person is detected, set person_present to True
@@ -86,10 +49,10 @@ def main_work():
         time_total = 0
     # If a person is not detected, wait until SENSE_DELAY_SECS and then set person_present to False
     else:
-        if time_total > SENSE_DELAY_SECS * 1000:
+        if time_total > rads.SENSE_DELAY_SECS * 1000:
             person_present = False
         else:
-            time_total += PROGRAM_HZ
+            time_total += rads.PROGRAM_HZ
 
     # If person_present is different than person_was_present, the status has changed
     # Send a HTTP request in this case
@@ -111,29 +74,35 @@ def main_work():
     # Set LED to green and sleep for PROGRAM_HZ time
     rgb_led.on()
     rgb_led.color = Color('green')
-    sleep(PROGRAM_HZ/1000)
+    sleep(rads.PROGRAM_HZ/1000)
 
-def testing():
+def testing(rads):
     # os.system('cls' if os.name == 'nt' else 'clear')
-    print(pir_sensor.motion_detected)
+    print(rads.pir_sensor.motion_detected)
 
-    rgb_led.color = Color('yellow')
-    rgb_led.on()
+    rads.rgb_led.color = Color('yellow')
+    rads.rgb_led.on()
     sleep(0.5)
     
 
 # Runs the code in normal mode if testing flag is present, otherwise sets led to red if any errors
-if sys.argv[1] == "-testing":
-    while True: testing()
+def run(rads):
+    if sys.argv[1] == "-testing":
+        while True: testing(rads)
+    
+    send_http(ROOT_URL + FALSE_ROOM_URL)
+    if sys.argv[1] == "-v":
+        print("starting")
+        while True: main_work(rads)
+    else:
+        while True:
+            try:
+                main_work(rads)
+            except:
+                rads.rgb_led.color = Color('red')
+                print("Error has ocurred in main loop!")
 
-send_http(ROOT_URL + FALSE_ROOM_URL)
-if sys.argv[1] == "-v":
-    print("starting")
-    while True: main_work()
-else:
-    while True:
-        try:
-            main_work()
-        except:
-            rgb_led.color = Color('red')
-            print("Error has ocurred in main loop!")
+
+if __name__ == "__main__":
+    rads_main = RADSInputOutput()
+    run(rads_main)
