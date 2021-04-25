@@ -9,8 +9,8 @@ def test_rgb(rads):
 	while True:
 		rads.rgb_led.color = Color("orange")
 		sleep(1)
-		rads.rgb_led.color = Color("purple")
-		sleep(1)
+		# rads.rgb_led.color = Color("purple")
+		# sleep(1)
 		# rads.rgb_led.color = Color("blue")
 		# sleep(1)
 
