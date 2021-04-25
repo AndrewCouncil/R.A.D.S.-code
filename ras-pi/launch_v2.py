@@ -1,6 +1,6 @@
 from colorzero import Color
 from time import sleep
-from gpio_obj import RADSInputOutput
+from io_obj import RADSInputOutput
 from network_tools import send_http
 import sys
 
