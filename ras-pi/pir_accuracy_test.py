@@ -21,7 +21,7 @@ print("LIST SIZE IS: {}".format(LIST_SIZE))
 print("DETECTION THRESHOLD IS: {}".format(DETECTION_COUNT_THRESHOLD))
 
 t0 = time.time()
-total_seconds = 2*60*60
+total_seconds = 1*60*60
 last_person_present = False
 detection_count = 0
 detected_duration = 0.0
