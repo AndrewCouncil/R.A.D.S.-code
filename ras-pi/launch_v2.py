@@ -33,7 +33,7 @@ def main_work(rads):
     rads.queue.append(tailval)
     # print(detection_count)
 
-    person_present = (detection_count > rads.DETECTION_COUNT_THRESHOLD)
+    person_detected = (detection_count > rads.DETECTION_COUNT_THRESHOLD)
 
     # If a person is detected, set person_present to True
     if person_detected:
