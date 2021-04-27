@@ -31,7 +31,7 @@ def main_work(rads):
     tailval = rads.pir_sensor.motion_detected
     detection_count += (int) (tailval)
     rads.queue.append(tailval)
-    print(detection_count)
+    # print(detection_count)
 
     person_present = (detection_count > rads.DETECTION_COUNT_THRESHOLD)
 
