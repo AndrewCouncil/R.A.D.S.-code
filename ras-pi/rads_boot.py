@@ -1,6 +1,7 @@
 from colorzero import Color
 from time import sleep
 from rgb_test import test_rgb
+from launch_v2 import headless
 from gpio_obj import RADSInputOutput
 from network_tools import network_wait
 import git
@@ -22,5 +23,8 @@ except:
     raise RuntimeError("Pulling of updated program failed!")
 
 
-print("Starting rgb")
-test_rgb(rads)
+# print("Starting rgb...")
+# test_rgb(rads)
+
+print("Launching website interface script...")
+headless(rads)

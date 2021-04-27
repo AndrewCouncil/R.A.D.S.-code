@@ -2,6 +2,7 @@ from colorzero import Color
 from time import sleep
 from io_obj import RADSInputOutput
 from network_tools import send_http
+from collections import deque
 import sys
 
 
@@ -11,6 +12,7 @@ person_detected = False
 person_present = False
 person_was_present = False
 pir_not_detected_time = 0
+detection_count = 0
 
 def main_work(rads):
     # set vars global
@@ -19,20 +21,18 @@ def main_work(rads):
     global person_present
     global person_was_present
     global pir_not_detected_time
+    global detection_count
     # -----------------PERSON DETECTION-----------------
     # If pir or distance sensor tripped, person_detected is True
     person_detected = False
-    if not rads.pir_sensor.motion_detected:
-        person_detected = True
-        pir_not_detected_time = 0
-    else:
-        # If pir off for more than DISTANCE_RESET_SECS, reset the maximum distance for the distance sensor
-        if pir_not_detected_time > rads.DISTANCE_RESET_SECS*1000:
-            # max_meters = distance_sensor.distance()
-            pir_not_detected_time = 0
-        else:
-            pir_not_detected_time += rads.PROGRAM_HZ
 
+    headval = rads.queue.popLeft()
+    detection_count -= (int) (headval)
+    tailval = rads.pir_sensor.motion_detected
+    detection_count += (int) (tailval)
+    rads.queue.append(tailval)
+
+    person_present = (detection_count > rads.DETECTION_COUNT_THRESHOLD)
 
     # If a person is detected, set person_present to True
     if person_detected:
@@ -51,20 +51,20 @@ def main_work(rads):
         print("person change detected!")
         if person_present:
             print("person on now")
+            rads.rgb_led.on()
+            rads.rgb_led.color = Color('green')
             request_url = rads.TRUE_ROOM_URL
         else:
             print("person off now")
+            rads.rgb_led.off()
             request_url = rads.FALSE_ROOM_URL
         
         send_http(request_url)
 
     person_was_present = person_present
 
-
-    # Set LED to green and sleep for PROGRAM_HZ time
-    rads.rgb_led.on()
-    rads.rgb_led.color = Color('green')
     sleep(rads.PROGRAM_HZ/1000)
+
 
 def testing(rads):
     # os.system('cls' if os.name == 'nt' else 'clear')
@@ -85,12 +85,16 @@ def run(rads):
         print("starting")
         while True: main_work(rads)
     else:
-        while True:
-            try:
-                main_work(rads)
-            except:
-                rads.rgb_led.color = Color('red')
-                print("Error has ocurred in main loop!")
+        headless(rads)
+
+def headless(rads):
+    while True:
+        try:
+            main_work(rads)
+        except:
+            rads.rgb_led.on()
+            rads.rgb_led.color = Color('red')
+            print("Error has ocurred in main loop!")
 
 
 if __name__ == "__main__":
