@@ -64,7 +64,7 @@ def main_work(rads):
 
     person_was_present = person_present
 
-    sleep(rads.PROGRAM_HZ/1000)
+    sleep((float)((float)(rads.PROGRAM_HZ)/1000.0))
 
 
 def testing(rads):
