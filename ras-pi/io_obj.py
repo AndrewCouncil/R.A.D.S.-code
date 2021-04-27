@@ -10,7 +10,7 @@ class RADSInputOutput:
     BLUE_PIN = 21
     GREEN_PIN = 20
 
-    PROGRAM_HZ = 30 #update speed of program
+    PROGRAM_HZ = 100 #update speed of program
     SENSE_DELAY_SECS = 120 #Seconds to delay after sensing before going inactive
     RECORD_DURATION_SECS = 240 #time to store data from pir to average
     QUEUE_SIZE =  (int) ((float)(RECORD_DURATION_SECS)/ (float)((float)(PROGRAM_HZ)/1000.0))
