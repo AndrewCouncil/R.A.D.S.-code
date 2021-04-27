@@ -1,0 +1,9 @@
+Person present now True  23:19:57
+Person present now False  23:43:02
+Person present now True  23:43:26
+Person present now False  23:43:43
+Person present now True  23:44:01
+Person present now False  23:50:17
+Person present now True  23:51:02
+Person present now False  00:06:10
+Person present now True  00:06:34
