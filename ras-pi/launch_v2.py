@@ -26,7 +26,7 @@ def main_work(rads):
     # If pir or distance sensor tripped, person_detected is True
     person_detected = False
 
-    headval = rads.queue.popLeft()
+    headval = rads.queue.popleft()
     detection_count -= (int) (headval)
     tailval = rads.pir_sensor.motion_detected
     detection_count += (int) (tailval)
