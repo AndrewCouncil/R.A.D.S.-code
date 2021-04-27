@@ -27,6 +27,6 @@ class RADSInputOutput:
         self.TRUE_ROOM_URL  = self.ROOT_URL + "/test?r={}&f=1".format(self.ROOM_NUM)
         
         # set up fi-lo queue for pir data
-        self.queue = deque([False] * (self.LIST_SIZE)) 
+        self.queue = deque([False] * (self.QUEUE_SIZE)) 
 
         
